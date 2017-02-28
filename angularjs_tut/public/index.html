@@ -1,0 +1,22 @@
+<!doctype html>
+<html ng-app="tasksApp">
+
+	<head>
+		<title>Hello AngularJS</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    	<script src="script.js"></script>
+	</head>
+
+	<body>
+		<div ng-controller="getTasks">
+			<p>The message is "{{tasks.message}}"</p>
+		</div>
+		<div ng-controller="postTasks">
+		    <p>begin_date: <input type="text" name="begin_date" ng-model="begin_date" required /></p>
+		    <p>end_date: <input type="text" name="end_date" ng-model="end_date" required /></p>
+		    <p>name: <input type="text" name="name" ng-model="name" required /></p>
+		    <button ng-click="SendData()">Submit</button>
+		</div>
+	</body>
+</html>
