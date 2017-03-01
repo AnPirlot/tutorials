@@ -1,0 +1,16 @@
+---
+- name: Install Apache
+  apt: pkg=apache2 state=installed update_cache=true
+  notify: 
+    - start apache
+
+- name: Create website directory
+  file: dest={{ website_dir  }} mode=775 state=directory owner=www-data group=www-data
+  notify:
+    - restart apache
+
+- name: Add virtual host
+  template: src=virtual-host.dev.j2 dest=/etc/apache2/sites-enabled/our-site.dev.conf
+    owner=root
+    group=root
+    mode=0644
