@@ -1,0 +1,16 @@
+---
+- name: Install common software requirements
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - git
+    - htop
+    - vim
+    - unzip
+    - curl
+    - sudo
+    - zsh
+
+- name: Create sudo group
+  group: 
+    name=sudo
+    state=present

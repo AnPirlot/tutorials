@@ -1,0 +1,10 @@
+---
+- hosts: all
+
+  vars:
+    - user_name: An
+
+  roles:
+    - common
+    - mivok0.users
+

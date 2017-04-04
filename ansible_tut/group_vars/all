@@ -1,0 +1,23 @@
+---
+# Create a group for every user and make that their primary group
+users_create_per_user_group: true
+
+# If we're not creating a per-user group, then this is the group all users
+# belong to
+users_group: users
+
+# The default shell for a user if none is specified
+users_default_shell: /bin/bash
+
+# Create home dirs for new users? Set this to false if you manage home
+# directories in some other way.
+users_create_homedirs: true
+
+users:
+  - username: tester
+    name: "my tester"
+    groups: ['sudo']
+    uid: 2001
+    password: $6$rounds=10000$oSMk3P6cook$/Fz/z5v3063mgDzeBRLYmwkAX95ToE5ewew.66IurDET0ScCb.wC.YkIMYRgi6MkfK1TZG7aNE5RT1LAg5taM1
+    ssh_key:
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkdPABhmwVKhG3QHljA0A4EGbb3C9Xu3qqGv0E+fJSzsRXQx0I2kC3pgSjBuzvGbvpIgUDKz7JLDtPrLnf8CfloUNWY79woXMcHbsjwlCKGSemF+QrO9fLoBP78WQNsuyLU5y3wMJJFnqX6NlP2KdPSTIm0aJ7VHZFzwvF/wKGqJ2aISM2/5E2yXlZ+JNQlc+Cm6vGvHMtyE7XzW7O5qrIul3/Npy1u57XtlXriN/H1EImJUtrOJ/xLbtxd4vAuinkuERywjHPA6jEZzluJttA6R/wA+Z41GQ/+wfkudA47+BSbPb2GLp1NrY3kJxgGsilGjVzUdMnJpuILvBS9L6BITcMAgupxxvnTZF+PBZd15LTxJqyU6l8Gf8isDMfZe4UJAF9iRgMrKG7abzMtPToQxbsWsyq1I2D6hIG1mnJr8xuTX2NoZy7SbT4wrCQ36TmFrblqDJuLlIDb1QcvuO/84RrzHd0QA6xG36oxUZ936ayM+N0qdlTN7CHNoGt1aRhLmtKxAgdO6wqn6jGxjQoBSHSKBnF3SeYSLK7rqQxMZOGobZMT9XMZ3Pcsy3QYvB1tHBp+ubtzAVCc0jCi00yUkmo3sPsAHT9m+hfNBHCRsq/JVXqttMRzNJRky4My4sriBaZEJBDRQoEMDgfVEk+NEa8IlwyrluLwy0PMTHYsQ== AnPirlot@gmail.com"
