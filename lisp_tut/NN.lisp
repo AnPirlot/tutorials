@@ -8,7 +8,7 @@
 
 ;;; Updating the weight using one input output tuple
 (defun train (input output)
-	(when (not(= output (* *weight* input)))
+	(when (not(= output (evaluate input)))
 		(setf *weight* (random 1.0))
 		(format t "~%the new weight: ~a" *weight*)))
 
