@@ -1,8 +1,8 @@
-;;;; A one node network which gets an input and output and calculates a weight accordingly
+;;;; A one node network which gets an input array and an output and calculates a weight accordingly
 
 (format t "~%Starting..")
 
-(defvar *input* 6)
+(defvar *input* '(1 2 3))
 (defvar *output* 5)
 (defvar *weight* 1.0)
 
@@ -12,10 +12,10 @@
 		(setf *weight* (random 1.0))
 		(format t "~%the new weight: ~a" *weight*)))
 
-;;; Calculate the output using an input and the current weight
+;;; Calculate the output using an input array and the current weight. weight*SUM(input)
 (defun evaluate (input)
-	(format t "~%the evaluated output: ~a" (* *weight* input))
-	(* *weight* input))
+	(format t "~%the evaluated output: ~a" (* *weight* (reduce #'+ input)))
+	(* *weight* (reduce #'+ input)))
 
 ;;; Calculate the error between a value and it's approximation
 (defun error-margin (value approximation)
