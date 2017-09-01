@@ -7,52 +7,61 @@
 
 (format t "~%Starting..")
 
-(defvar *input* '(1 2 3))
+(defvar *input* '(5 9 3))
 (defvar *output* '(0 0 1))
 
 (defvar *nodes* (make-array 3 :initial-element (make-node :weight (random 1.0))))
 
+(defun copy-nodes (nodes)
+  (setf copy (make-array (car (array-dimensions nodes))))
+  (dotimes (i (car (array-dimensions nodes)))
+    (setf (aref copy i) (copy-node (aref nodes i))))
+  (return-from copy-nodes copy))
 
-;;; Updating the weight using one input output tuple
-(defun train (input output)
-	(when (not(eq output (evaluate input)))
-		(map 'array #'update-weight *nodes*)
-		(loop for node across *nodes*
-			do (format t "~%the new weights: ~a" (node-weight node)))))
+
+;;; Using an array of inputs and an array of outputs to train an array of nodes. This returns a copy of the array of nodes with updated weights.
+(defun train (input output nodes)
+  "Using an array of inputs and an array of outputs to train an array of nodes. This returns a copy of the array of nodes with updated weights."
+  (map 'array #'update-weight-of-node nodes))
 
 ;;; The function to be used to update a nodes' weight
-(defun update-weight (node)
-	(setf (node-weight node) (random 1.0)))
+(defun update-weight-of-node (node)
+  "Updating the weight of the node"
+  (return-from update-weight-of-node (make-node :weight (random 1.0))))
 
-;;; Calculate the output using an input array and the current weight. weight*SUM(input)
-(defun evaluate (input)
-	(map 'array #'(lambda(x) (evaluate-node input x)) *nodes*))
+;;; Calculate the output using an input array and an array of nodes
+(defun evaluate (input nodes)
+  "Evalute the given input using the given nodes"
+	(map 'array #'(lambda(x) (evaluate-node input x)) nodes))
 
-;;; Calculate the output using an input array and the current weight for one node. weight*SUM(input)
+;;; Calculate the output using an input array and the current weight of one node. weight*SUM(input)
 (defun evaluate-node (input node)
-	(format t "~%the evaluated output for node ~a: ~a" node (* (node-weight node) (reduce #'+ input)))
+  "Evaluate to output of one node given an input"
 	(* (node-weight node) (reduce #'+ input)))
 
 ;;; Calculate the error between a value and it's approximation
 (defun error-margin (value approximation)
+  "Calculate the error margin for every value and its approximation"
 	(map 'array #'abs (map 'array #'- value approximation)))
 
 ;;; Check if the error margin is small enough
-(defun error-margin-ok (value approximation)
+(defun error-margin-okp (value approximation)
+  "Check if the error margin is acceptable"
 	(let ((margin (error-margin value approximation)))
 		(format t "~%the error margin for ~a: ~a" margin (reduce #'+ margin))
 		(if (< (reduce #'+ margin) 3.0) t nil)))
 
 ;;; Keep on training until the error margin is small enough
-(defun train-until-convergence ()
-	(loop
-		(format t "~% Still training..")
-		(train *input* *output*)
-		(let ((approximation (evaluate *input*)))
-			(when (error-margin-ok *output* approximation)
-				(return *nodes*))))
-	(format t "~%Done training"))
+(defun train-until-convergence (input output nodes)
+  "Keep on training the given nodes using an input and output until there weights converge"
+    (format t "~% Still training..")
+    (let ((approximation (evaluate input nodes)))
+      (format t "~%approximation: ~a" approximation)
+      (if (error-margin-okp output approximation)
+        (return-from train-until-convergence nodes)
+        (train-until-convergence input output (train input output nodes)))))
 
-(train-until-convergence)
-(format t "~%~%The converged nodes are: ~a" *nodes*)
+(setf calc-nodes (train-until-convergence *input* *output* *nodes*))
+(format t "~%~%The converged nodes are: ~a" calc-nodes)
+(format t "~%~%Which gives us output approximation ~a for input ~a and output ~a" (Evaluate *input* calc-nodes) *input* *output*)
 
