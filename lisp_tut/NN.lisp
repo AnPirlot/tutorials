@@ -7,7 +7,7 @@
 
 (format t "~%Starting..")
 
-(defvar *input* '(1 1 2))
+(defvar *input* '(0 0 1))
 (defvar *output* '(0 0 1))
 
 (defvar *nodes* (make-array 3 :initial-element (make-node :weight (random 1.0))))
@@ -16,7 +16,7 @@
   (setf copy (make-array (car (array-dimensions nodes))))
   (dotimes (i (car (array-dimensions nodes)))
     (setf (aref copy i) (copy-node (aref nodes i))))
-  (return-from copy-nodes copy))
+  copy-nodes copy)
 
 
 ;;; Using an array of inputs and an array of outputs to train an array of nodes. This returns a copy of the array of nodes with updated weights.
@@ -27,7 +27,7 @@
 ;;; The function to be used to update a nodes' weight.
 (defun update-weight-of-node (node)
   "Updating the weight of the node."
-  (return-from update-weight-of-node (make-node :weight (random 1.0))))
+  (make-node :weight (random 1.0)))
 
 ;;; Calculate the output using an input array and an array of nodes.
 (defun evaluate (input nodes)
@@ -55,8 +55,8 @@
 (defun recursive-error-margin-okp (margin i result)
   "Checks multiple error margins that all margins are small enough, result starts as true."
   (if (>= i 0)
-    (if (> (aref margin i) 0.5) 
-      (recursive-error-margin-okp margin (- i 1) (and nil result)) 
+    (if (> (aref margin i) 0.2) 
+      nil 
       (recursive-error-margin-okp margin (- i 1) (and t result)))
     result))
 
@@ -67,7 +67,7 @@
     (let ((approximation (evaluate input nodes)))
       (format t "~%approximation: ~a" approximation)
       (if (error-margin-okp output approximation)
-        (return-from train-until-convergence nodes)
+        nodes
         (train-until-convergence input output (train input output nodes)))))
 
 (setf calc-nodes (train-until-convergence *input* *output* *nodes*))
